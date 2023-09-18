@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-gray-100;
+}
+
+:root {
+    --sidebar-width: 20rem;
+    --collapsed-sidebar-width: 4.5rem;
+}
