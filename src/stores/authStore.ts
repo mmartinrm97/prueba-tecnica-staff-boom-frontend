@@ -1,36 +1,27 @@
 import { defineStore } from 'pinia'
 import { User } from '~/interfaces/users'
-import { useApiFetch } from '~/composables/useApiFetch'
-import { LoginInput } from '~/interfaces/auth'
+import { fetchUser, logoutUser } from '~/composables/auth/useApiAuthUser'
+import { UserTokenData } from "~/interfaces/auth";
 
 export const useAuthStore = defineStore('auth', () => {
-  const authUser = ref<User | null>(null)
 
+  const authUser = ref<UserTokenData | null>(null)
+  const authUserToken = ref<string | null>(null)
   const isLoggedIn = computed(() => !!authUser.value)
 
-  async function logout() {
-    await useApiFetch('/logout', { method: 'POST' })
-    authUser.value = null
-    navigateTo('/login')
+  function setAuthUserStore(newUser: UserTokenData | null) {
+    authUser.value = newUser
   }
 
-  async function fetchUser() {
-    const { data, error } = await useApiFetch('/api/my-user')
-    // console.log('error fetching user', error)
-    authUser.value = data.value as User
+
+  async function fetchUserStore() {
+    const {data, error} = await useApiFetch("/api/my-user");
+    authUser.value = data.value as UserTokenData;
   }
 
-  async function login(credentials: LoginInput) {
-    await useApiFetch('/sanctum/csrf-cookie')
-
-    const login = await useApiFetch('/login', {
-      method: 'POST',
-      body: credentials
-    })
-
-    await fetchUser()
-
-    return login
+  async function logoutUserStore() {
+    await logoutUser()
+    setAuthUserStore(null)
   }
 
   return {
@@ -38,15 +29,15 @@ export const useAuthStore = defineStore('auth', () => {
     authUser,
 
     //getters
-    // isLoggedIn: computed(() => !!authUser.value),
+    isLoggedIn,
 
     //actions
-    setAuthUser(newUser: User | null) {
-      authUser.value = newUser
-    },
-    login,
-    fetchUser,
-    isLoggedIn,
-    logout
+    setAuthUserStore,
+    fetchUserStore,
+    logoutUserStore,
+  }
+},{
+  persist: {
+    storage: persistedState.localStorage,
   }
 })

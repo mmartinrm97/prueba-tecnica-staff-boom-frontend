@@ -1,7 +1,7 @@
 import { APITaskResponse, Task } from "~/interfaces/tasks";
 import { useApiFetch } from "~/composables/useApiFetch";
 import { useMutation, useQuery } from "@tanstack/vue-query";
-import { getTask, updateTask } from "~/composables/tasks/tasksApi";
+import { getTask, updateTask } from "~/composables/tasks/useTasksApi";
 
 const useTask = ( id: string ) => {
 

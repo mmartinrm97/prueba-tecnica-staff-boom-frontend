@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Task, TaskFormData } from '~/interfaces/tasks'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
-import { updateTask } from '~/composables/tasks/tasksApi'
+import { updateTask } from '~/composables/tasks/useTasksApi'
 
 interface Props {
   tasks: Task[]

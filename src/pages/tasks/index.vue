@@ -4,7 +4,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as zod from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { TaskFormData } from '~/interfaces/tasks'
-import { createTask } from '~/composables/tasks/tasksApi'
+import { createTask } from '~/composables/tasks/useTasksApi'
 
 definePageMeta({ middleware: ['auth'] })
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import useTask from '~/composables/tasks/useTask'
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
-import { deleteTask, updateTask } from "~/composables/tasks/tasksApi";
+import { deleteTask, updateTask } from "~/composables/tasks/useTasksApi";
 import { TaskFormData } from "~/interfaces/tasks";
 
 const { id } = useRoute().params

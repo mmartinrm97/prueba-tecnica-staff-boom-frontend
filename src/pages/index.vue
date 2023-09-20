@@ -10,7 +10,7 @@ const authUser = useAuthStore();
   <div>
     <h1 class="text-3xl">Bienvenido</h1>
 
-    <pre>{{authUser.authUser.name}} </pre>
+    <pre>{{authUser.authUser?.user.name}} </pre>
   </div>
 </template>
 

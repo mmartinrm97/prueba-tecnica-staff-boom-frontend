@@ -4,7 +4,7 @@ import { ref } from 'vue'
 // Composition api style
 export const useSidebarStore = defineStore('sidebar', () => {
   //States
-  const sidebarOpened = ref(true)
+  const sidebarOpened = ref(false)
 
   //Actions
   function setSidebarOpen() {

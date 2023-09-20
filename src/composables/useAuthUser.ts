@@ -1,38 +1,52 @@
 import { User } from '~/interfaces/users'
-import { LoginInput } from '~/interfaces/auth'
-import { useApiFetch } from '~/composables/useApiFetch'
-import { useAuthStore } from "~/stores/authStore";
-import { useMutation } from "@tanstack/vue-query";
+import { useAuthStore } from '~/stores/authStore'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { storeToRefs } from 'pinia'
+import { fetchUser, loginUser } from '~/composables/auth/useApiAuthUser'
+import { UserTokenData } from "~/interfaces/auth";
 
-async function fetchUser() {
-  const { data, error } = await useApiFetch('/api/my-user')
-  // console.log('error fetching user', error)
-  return data.value as User
-}
+const useLoginMutation = () => {
+  const store = useAuthStore()
+  const { authUser, isLoggedIn } = storeToRefs(store)
 
-async function login(credentials: LoginInput) {
-  await useApiFetch('/sanctum/csrf-cookie')
+  const queryClient = useQueryClient()
 
-  await useApiFetch('/login', {
-    method: 'POST',
-    body: {
-      email: credentials.email,
-      password: credentials.password
+  // const authUserFetch = useQuery(['authUser'], () => fetchUser(), {
+  //   enabled: isLoggedIn.value,
+  //   retry: 1,
+  //   onSuccess: (data) => {
+  //     store.setAuthUserStore(data)
+  //   }
+  // })
+
+  const authUserMutation = useMutation(loginUser, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['authUser'],
+        exact: true
+      })
+
+      queryClient.refetchQueries({
+        queryKey: ['authUser']
+      })
+
+      queryClient.setQueryData(['authUser'], data)
     }
   })
 
-  return fetchUser();
-}
-
-const useLogin = (credentials: LoginInput) =>{
-  const store = useAuthStore();
-
-  const authUserMutation = useMutation( login );
-
   return {
     // Properties
+    authUser,
+    // authUserFetch,
+    isLoggedIn,
+    authUserMutation,
 
+    setAuthUser(authUser: UserTokenData | null) {
+      //if authUser is null then just return
+      if (!authUser) return
+      store.setAuthUserStore(authUser)
+    },
   }
-
 }
 
+export default useLoginMutation

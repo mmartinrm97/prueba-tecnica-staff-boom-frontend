@@ -1,7 +1,7 @@
 import { useTasksStore } from "~/stores/tasksStore";
 import { storeToRefs } from "pinia";
 import { useQuery } from "@tanstack/vue-query";
-import { getTasksResponse } from "~/composables/tasks/tasksApi";
+import { getTasksResponse } from "~/composables/tasks/useTasksApi";
 
 //axios version
 // const getTasksResponse = async (page: number): Promise<APITasksResponse> => {
@@ -46,7 +46,7 @@ const useTasks = () => {
     getPage(page: number) {
       store.setPage(page)
     },
-    getTotalPages(totalPages: number) {
+    setTotalPages(totalPages: number) {
       store.setTotalPages(totalPages)
     }
   }

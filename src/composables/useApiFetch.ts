@@ -1,32 +1,28 @@
 import type {UseFetchOptions} from 'nuxt/app'
 import {useRequestHeaders} from "nuxt/app";
+import { useAuthStore } from "~/stores/authStore";
 
 export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
 
-
   const runtimeConfig = useRuntimeConfig()
+
+  const userAuth = useAuthStore()
+  const token = userAuth.authUser?.access_token
+
   let headers: any = {
     accept: "application/json",
-    referer: runtimeConfig.API_FRONTEND_URL || "http://localhost:3000",
+    "Content-Type": "application/json",
   }
 
-  //get the config
-
-  const token = useCookie('XSRF-TOKEN');
-
-  if (token.value) {
-    headers['X-XSRF-TOKEN'] = token.value as string;
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
   }
 
-  if (process.server) {
-    headers = {
-      ...headers,
-      ...useRequestHeaders(["cookie"]),
-    }
-  }
-  const backendURL = runtimeConfig.public.API_BACKEND_URL || "http://localhost:8000"
-  return useFetch(backendURL + path, {
-    credentials: "include",
+  const backendURL = runtimeConfig.public.API_BACKEND_URL
+
+  return useFetch(path, {
+    // credentials: "include",
+    baseURL: backendURL,
     watch: false,
     ...options,
     headers: {
