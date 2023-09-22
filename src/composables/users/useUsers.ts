@@ -1,7 +1,7 @@
 import { useUsersStore } from '~/stores/usersStore'
 import { storeToRefs } from 'pinia'
 import { useQuery } from '@tanstack/vue-query'
-import { getUsersResponse } from '~/composables/users/usersApi'
+import { getUsersResponse } from '~/composables/users/useApiUsers'
 
 const useUsers = () => {
   const store = useUsersStore()

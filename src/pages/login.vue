@@ -55,7 +55,9 @@ const { isLoading, mutate } = useMutation(
   (credentials: LoginInput) => loginUser(credentials),
   {
     onSuccess: (data) => {
+
       queryClient.refetchQueries(['authUser'])
+      navigateTo('/')
       toast.add({
         id: 'login_success',
         title: 'Login success',
@@ -63,7 +65,6 @@ const { isLoading, mutate } = useMutation(
         icon: 'i-heroicons-check-circle-20-solid'
       })
       authStore.setAuthUserStore(data.data)
-      navigateTo('/')
       resetForm()
     }
   }
@@ -89,7 +90,7 @@ const onHandleLogin = handleSubmit(async (values) => {
       <h1
         class="-header-heading text-center text-2xl font-bold tracking-tight text-gray-950 dark:text-white"
       >
-        Iniciar Sesión
+        Sing In
       </h1>
     </header>
 
@@ -101,6 +102,7 @@ const onHandleLogin = handleSubmit(async (values) => {
             :trailing-icon="error && 'i-heroicons-exclamation-triangle-20-solid'"
             autocomplete="email"
             icon="i-heroicons-envelope"
+            :disabled="isLoading"
           />
         </UFormGroup>
 
@@ -117,6 +119,7 @@ const onHandleLogin = handleSubmit(async (values) => {
             autocomplete="current-password"
             icon="i-heroicons-key"
             type="password"
+            :disabled="isLoading"
           />
         </UFormGroup>
 

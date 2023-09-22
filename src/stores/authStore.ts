@@ -6,7 +6,6 @@ import { UserTokenData } from "~/interfaces/auth";
 export const useAuthStore = defineStore('auth', () => {
 
   const authUser = ref<UserTokenData | null>(null)
-  const authUserToken = ref<string | null>(null)
   const isLoggedIn = computed(() => !!authUser.value)
 
   function setAuthUserStore(newUser: UserTokenData | null) {

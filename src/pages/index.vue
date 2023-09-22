@@ -1,16 +1,24 @@
 <script lang="ts" setup>
-import { useAuthStore } from "~/stores/authStore";
+import TheHeader from '~/components/TheHeader.vue'
 
-definePageMeta({ middleware: ["auth"] });
+definePageMeta({ middleware: ['auth'] })
 
-const authUser = useAuthStore();
+// const headerButtons = [
+//   {
+//     label: 'Logout',
+//     onClick: () => {
+//       const authStore = useAuthStore()
+//       authStore.logoutUserStore()
+//       // navigateTo('/login')
+//     },
+//     to: '/login'
+//   }
+// ]
 </script>
 
 <template>
   <div>
-    <h1 class="text-3xl">Bienvenido</h1>
-
-    <pre>{{authUser.authUser?.user.name}} </pre>
+    <TheHeader title="Dashboard" />
   </div>
 </template>
 

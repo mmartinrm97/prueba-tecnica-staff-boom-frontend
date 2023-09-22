@@ -5,6 +5,7 @@ import * as zod from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { TaskFormData } from '~/interfaces/tasks'
 import { createTask } from '~/composables/tasks/useTasksApi'
+import TheHeader from "~/components/TheHeader.vue";
 
 definePageMeta({ middleware: ['auth'] })
 
@@ -99,7 +100,8 @@ const items = [
 </script>
 
 <template>
-  <div>
+  <TheBasePage>
+    <TheHeader title="Tasks"/>
     <div class="flex justify-between">
       <h1 class="text-3xl">Listado de tareas</h1>
       <div class="flex items-center gap-x-6">
@@ -192,7 +194,7 @@ const items = [
         </UTabs>
       </div>
     </ClientOnly>
-  </div>
+  </TheBasePage>
 </template>
 
 <style scoped></style>

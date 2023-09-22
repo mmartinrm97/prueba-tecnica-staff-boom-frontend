@@ -17,16 +17,15 @@ const authUser = useAuthStore()
 
 //get the first letter of the user
 const firstLetter = computed(() => {
-  if(authUser.authUser?.user.name === undefined) return
+  if (authUser.authUser?.user.name === undefined) return
   return authUser.authUser?.user.name.charAt(0)
 })
 
 const sidebarStore = useSidebarStore()
 const { sidebarOpened } = storeToRefs(sidebarStore)
 
-
-
 const auth = useAuthStore()
+
 async function onHandleLogout() {
   await auth.logoutUserStore()
   navigateTo('/login')
@@ -42,7 +41,7 @@ const items = [
   ],
   [
     {
-      label: 'Cerrar sesión',
+      label: 'Sign out',
       icon: 'i-heroicons-arrow-left-on-rectangle',
       click: () => {
         onHandleLogout()
@@ -63,7 +62,6 @@ const items = [
         <span class="sr-only"> Expand sidebar </span>
         <Icon class="text-black dark:text-white" name="iconamoon:menu-burger-horizontal-bold" />
       </button>
-
 
       <div class="ms-auto flex items-center gap-x-4">
         <div class="flex">
@@ -113,7 +111,7 @@ const items = [
             </button>
             <template #account="{ item }">
               <div class="text-left">
-                <p>Sesión iniciada como:</p>
+                <p>Signed in as:</p>
                 <p class="truncate font-medium text-gray-900 dark:text-white">
                   {{ item.label }}
                 </p>
@@ -132,13 +130,26 @@ const items = [
     </nav>
 
     <USlideover v-model="sidebarOpened" side="left">
-      <UCard class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <UCard
+        :ui="{
+          body: { base: 'flex-1' },
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800'
+        }"
+        class="flex flex-1 flex-col"
+      >
         <template #header>
           <div class="flex items-center justify-between">
             <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
               Slideover
             </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="sidebarOpened = false" />
+            <UButton
+              class="-my-1"
+              color="gray"
+              icon="i-heroicons-x-mark-20-solid"
+              variant="ghost"
+              @click="sidebarOpened = false"
+            />
           </div>
         </template>
         <div class="h-full" />

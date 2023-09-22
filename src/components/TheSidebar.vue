@@ -2,17 +2,26 @@
 
 const links = [
   {
-    label: 'Inicio',
+    label: 'Home',
+    icon: 'i-heroicons-home',
+    badge: 100,
     to: '/'
   },
   {
-    label: 'Usuarios',
-    to: '/users'
+    label: 'My Tasks',
+    icon: 'i-heroicons-document',
+    to: '/my-tasks'
   },
   {
-    label: 'Tareas',
-    to: '/tasks'
+    label: 'Users',
+    icon: 'i-heroicons-users',
+    to: '/users',
+  },{
+    label: 'Tasks',
+    icon: 'i-material-symbols-task',
+    to: '/tasks',
   }
+
 ]
 </script>
 <template>
@@ -34,17 +43,23 @@ const links = [
       <UVerticalNavigation
         :links="links"
         :ui="{
-          wrapper: 'border-s border-gray-200 dark:border-gray-800 space-y-2',
-          base: 'group  border-s -ms-px lg:leading-6 before:hidden',
-          padding: 'p-0 ps-4',
-          rounded: '',
-          font: '',
-          ring: '',
-          active: 'text-primary-500 dark:text-primary-400 border-current font-semibold py-3',
-          inactive:
-            'border-transparent hover:border-gray-400 dark:hover:border-gray-500 text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 py-3'
+          wrapper: 'space-y-2',
+          base: 'group -ms-px lg:leading-6  py-3 ',
+          padding: 'ps-4',
+          size: 'text-md',
+          icon: {
+            base: 'h-6 w-6',
+            active: 'text-primary-500 dark:text-primary-400 border-current font-semibold '
+          },
+          active: 'text-primary-500 dark:text-primary-400 border-current font-semibold ',
+           inactive: 'border-transparent hover:border-gray-400 dark:hover:border-gray-500 text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300'
         }"
       />
     </nav>
   </aside>
 </template>
+
+<!--wrapper: 'space-y-2', base: 'group -ms-px lg:leading-6 before:hidden py-3 ', padding: 'p-0 ps-4',-->
+<!--size: 'text-xl', icon:{ base: 'h-6 w-6', active: 'text-primary-500 dark:text-primary-400-->
+<!--border-current font-semibold' }, active: 'text-primary-500 dark:text-primary-400 border-current-->
+<!--font-semibold',-->

@@ -9,7 +9,7 @@ Antes de comenzar a ejecutar la aplicación localmente, asegúrate de tener inst
 
 - Node.js (versión 14 o superior)
 - npm (normalmente se instala junto con Node.js)
-- Backend de la aplicación configurado y en ejecución (sigue los pasos en el README del backend) https://github.com/mmartinrm97/prueba-tecnica-staff-boom-backend
+- Backend de la aplicación configurada y en ejecución (sigue los pasos en el README del backend) https://github.com/mmartinrm97/prueba-tecnica-staff-boom-backend
 - Editor de código (recomendado: Visual Studio Code o WebStorm
 
 ## Configuración Inicial

@@ -1,7 +1,7 @@
 import { APIUserResponse, User } from "~/interfaces/users";
 import { useApiFetch } from "~/composables/useApiFetch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { getUser } from "~/composables/users/usersApi";
+import { getUser } from "~/composables/users/useApiUsers";
 
 const useUser = (id: string) => {
   const user = ref<User>()

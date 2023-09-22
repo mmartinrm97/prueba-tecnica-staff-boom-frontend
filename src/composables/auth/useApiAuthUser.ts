@@ -5,11 +5,11 @@ import { APILoginResponse, LoginInput } from '~/interfaces/auth'
 export const fetchUser = async (): Promise<APIUserResponse> => {
   const { data, error } = await useApiFetch<APIUserResponse>('/api/auth/user')
 
-  // if (error.value) {
-  //   const errorData = error.value.data.errors
-  //   const errorMessage = JSON.stringify(errorData) as string
-  //   throw new Error(errorMessage)
-  // }
+  if (error.value) {
+    const errorData = error.value.data.errors
+    const errorMessage = JSON.stringify(errorData) as string
+    throw new Error(errorMessage)
+  }
 
   return data.value as APIUserResponse
 }
