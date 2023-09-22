@@ -2,27 +2,30 @@
 import TheHeader from '~/components/TheHeader.vue'
 import { getUsersResponse } from '~/composables/users/useApiUsers'
 import { useQuery } from '@tanstack/vue-query'
-import { APIUserResponse, APIUsersResponse } from "~/interfaces/users";
+import { User } from '~/interfaces/users'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/es'
 
+//Pagination
+const currentPagePagination = ref<number>(1)
+const paginationItems = ref(Array(100))
+const perPagePagination = ref<number>(10)
+
+watch(perPagePagination, () => {
+  perPagePagination.value = Number(perPagePagination.value)
+})
+
+//Get data from endpoint
 const { data, isLoading, isFetching, error, refetch } = useQuery(
-  ['users', 1],
-  () => getUsersResponse(1),
+  [`users?page=${currentPagePagination.value}?per_page=${perPagePagination.value}`],
+  () => getUsersResponse(currentPagePagination, perPagePagination),
   {
     enabled: true,
     retry: 1
   }
 )
-
-//make a function to limit the number size of the name
-const limitName = (name: string) => {
-  if (name.length > 12) {
-    return name.slice(0, 12) + '...'
-  }
-  return name
-}
+const fromPagination = ref(1)
 
 const labelBadgeByRole = (role_id: string) => {
   if (role_id === '1') {
@@ -44,39 +47,34 @@ const colorBadgeByRole = (role_id: string) => {
   return 'gray'
 }
 
-//Pagination
-const page = ref(1)
-const paginationItems = ref(Array(55))
-const pageCount = ref(10)
-
 //Tabs
 const tabItems = [
   {
     label: 'All users',
-    role_filter: null,
+    role_filter: null
   },
   {
     label: 'All admin users',
-    role_filter: "1"
+    role_filter: '1'
   },
   {
     label: 'All normal users',
-    role_filter: "2"
+    role_filter: '2'
   }
 ]
-function onTabChange (index:number) {
+
+function onTabChange(index: number) {
   const item = tabItems[index]
   roleFilter.value = item.role_filter
 }
 
-const roleFilter = ref<string|null>(null)
+const roleFilter = ref<string | null>(null)
 
-const filteredUsersByRoleId = (roleId: string|null): APIUserResponse => {
-  if(roleId === null) {
+const filteredUsersByRoleId = (roleId: string | null): User[] | undefined => {
+  if (roleId === null) {
     return data.value?.data
   }
   return data.value?.data.filter((user) => user.role_id === roleId)
-
 }
 
 dayjs.locale('en')
@@ -87,10 +85,7 @@ const formatDate = (date: Date | undefined) => {
 
   return dayjs(date).format('DD/MM/YYYY, HH:mm:ss')
 }
-
-
 </script>
-
 
 <template>
   <TheBasePage>
@@ -101,7 +96,7 @@ const formatDate = (date: Date | undefined) => {
     <div v-else-if="isFetching">Actualizando ...</div>
     <!--    The Data-->
     <div class="flex flex-col gap-y-6">
-      <UTabs :items="tabItems" class="w-full"  @change="onTabChange"/>
+      <UTabs :items="tabItems" class="w-full" @change="onTabChange" />
       <div
         v-if="data?.data"
         class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
@@ -114,22 +109,32 @@ const formatDate = (date: Date | undefined) => {
               <h3 class="truncate font-bold">{{ user.name }}</h3>
             </div>
           </template>
-         <ul>
-           <li>
-           <p class="truncate text-md"><span class="font-bold pr-2">📧: </span>{{ user.email }}</p>
-           </li>
-           <li>
-             <UTooltip>
-               <template #text>
-                 <span class="truncate text-sm"> Created at: {{new Date(user.created_at).toLocaleString() }}</span>
-               </template>
-               <p><span class="font-bold pr-2">⛏:</span>{{ dayjs(user?.created_at).fromNow() }}</p>
-             </UTooltip>
-           </li>
-         </ul>
+          <ul>
+            <li>
+              <p class="text-md truncate">
+                <span class="pr-2 font-bold">📧: </span>{{ user.email }}
+              </p>
+            </li>
+            <li>
+              <UTooltip>
+                <template #text>
+                  <span class="truncate text-sm">
+                    Created at: {{ new Date(user.created_at).toLocaleString() }}</span
+                  >
+                </template>
+                <p>
+                  <span class="pr-2 font-bold">⛏:</span>{{ dayjs(user?.created_at).fromNow() }}
+                </p>
+              </UTooltip>
+            </li>
+          </ul>
           <template #footer>
             <div class="flex items-center justify-between">
-              <UBadge :label="labelBadgeByRole(user.role_id)" :color="colorBadgeByRole(user.role_id)" variant="soft"  />
+              <UBadge
+                :color="colorBadgeByRole(user.role_id)"
+                :label="labelBadgeByRole(user.role_id)"
+                variant="soft"
+              />
               <NuxtLink :to="`/users/${user.id}`">
                 <UButton icon="i-heroicons-eye" label="View" size="sm" />
               </NuxtLink>
@@ -146,14 +151,18 @@ const formatDate = (date: Date | undefined) => {
             <span class="text-sm leading-5">Rows per page:</span>
 
             <USelect
-              v-model="pageCount"
+              v-model="perPagePagination"
               :options="[3, 5, 10, 20, 30, 40]"
               class="me-2 w-20"
               size="xs"
             />
           </div>
         </div>
-        <UPagination v-model="page" :page-count="5" :total="paginationItems.length" />
+        <UPagination
+          v-model="currentPagePagination"
+          :page-count="5"
+          :total="paginationItems.length"
+        />
       </nav>
     </div>
   </TheBasePage>
